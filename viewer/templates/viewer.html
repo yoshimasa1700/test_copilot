@@ -3,21 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Workspace {{ name }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; }
         canvas { width: 100%; height: 80vh; display: block; }
     </style>
 </head>
-<body>
-    <h1>Workspace: {{ name }}</h1>
-    <div id="viewer"></div>
-    <div>
-        <label>Point Size:
-            <input type="range" id="point-size" min="0.001" max="0.05" step="0.001" value="0.01">
-        </label>
-        <label>Camera Size:
-            <input type="range" id="camera-size" min="0.005" max="0.1" step="0.005" value="0.02">
-        </label>
+<body class="container">
+    <h3 class="center-align">Workspace: {{ name }}</h3>
+    <div id="viewer" class="card"></div>
+    <div class="section">
+        <div class="row">
+            <div class="col s12 m6">
+                <label for="point-size">Point Size</label>
+                <input type="range" id="point-size" min="0.001" max="0.05" step="0.001" value="0.01">
+            </div>
+            <div class="col s12 m6">
+                <label for="camera-size">Camera Size</label>
+                <input type="range" id="camera-size" min="0.005" max="0.1" step="0.005" value="0.02">
+            </div>
+        </div>
     </div>
     <script>
         const WORKSPACE = "{{ name }}";
@@ -25,5 +29,6 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.135.0/examples/js/controls/OrbitControls.js"></script>
     <script src="/static/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
