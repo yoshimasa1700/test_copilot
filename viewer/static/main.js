@@ -96,6 +96,8 @@ async function loadWorkspace(name) {
 
     cameraGroup = new THREE.Group();
     const camSize = parseFloat(document.getElementById('camera-size').value || '0.02');
+    cameraGroup.userData.baseSize = camSize;
+    cameraGroup.userData.currentSize = camSize;
     for (const key in data.images) {
         const img = data.images[key];
         const center = cameraCenter(img);
@@ -123,7 +125,10 @@ function setupSizeControls() {
         cameraSlider.addEventListener('input', () => {
             const val = parseFloat(cameraSlider.value);
             if (cameraGroup) {
-                cameraGroup.children.forEach(c => c.scale.set(val, val, val));
+                const base = cameraGroup.userData.currentSize || 1;
+                const factor = val / base;
+                cameraGroup.children.forEach(c => c.scale.multiplyScalar(factor));
+                cameraGroup.userData.currentSize = val;
             }
         });
     }
