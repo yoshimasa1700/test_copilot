@@ -1,7 +1,5 @@
 import os
-import json
 from typing import List, Dict
-import numpy as np
 
 
 def list_workspaces(base_path: str = os.path.join(os.path.dirname(__file__), "workspaces")) -> List[str]:

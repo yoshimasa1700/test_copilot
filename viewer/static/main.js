@@ -29,12 +29,17 @@ async function loadWorkspaces() {
     const data = await res.json();
     const listDiv = document.getElementById('workspace-list');
     listDiv.innerHTML = '';
+    const ul = document.createElement('ul');
     data.workspaces.forEach(name => {
-        const btn = document.createElement('button');
-        btn.textContent = name;
-        btn.onclick = () => loadWorkspace(name);
-        listDiv.appendChild(btn);
+        const li = document.createElement('li');
+        const link = document.createElement('a');
+        link.href = '#';
+        link.textContent = name;
+        link.onclick = (e) => { e.preventDefault(); loadWorkspace(name); };
+        li.appendChild(link);
+        ul.appendChild(li);
     });
+    listDiv.appendChild(ul);
 }
 
 function quaternionToMatrix(qw, qx, qy, qz) {
@@ -48,7 +53,7 @@ function cameraCenter(image) {
     const R = quaternionToMatrix(image.qw, image.qx, image.qy, image.qz);
     const t = new THREE.Vector3(image.tx, image.ty, image.tz);
     const Rt = new THREE.Matrix3().setFromMatrix4(R);
-    const RtInv = new THREE.Matrix3().getInverse(Rt);
+    const RtInv = Rt.clone().invert();
     const c = t.clone().applyMatrix3(RtInv).multiplyScalar(-1);
     return c;
 }
