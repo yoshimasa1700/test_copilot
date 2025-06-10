@@ -8,7 +8,12 @@ def list_workspaces(base_path: str = os.path.join(os.path.dirname(__file__), "wo
     workspaces = []
     for name in os.listdir(base_path):
         w_path = os.path.join(base_path, name)
-        if os.path.isdir(os.path.join(w_path, 'sparse', '0')):
+        if not os.path.isdir(w_path):
+            continue
+        sparse_dir = os.path.join(w_path, 'sparse', '0')
+        root_files = all(os.path.isfile(os.path.join(w_path, f)) for f in (
+            'cameras.txt', 'images.txt', 'points3D.txt'))
+        if os.path.isdir(sparse_dir) or root_files:
             workspaces.append(name)
     return workspaces
 
@@ -90,8 +95,14 @@ def _parse_points3d(path: str) -> List[Dict]:
 
 
 def load_workspace(name: str, base_path: str = os.path.join(os.path.dirname(__file__), 'workspaces')) -> Dict:
-    sparse_path = os.path.join(base_path, name, 'sparse', '0')
-    cameras = _parse_cameras(os.path.join(sparse_path, 'cameras.txt'))
-    images = _parse_images(os.path.join(sparse_path, 'images.txt'))
-    points = _parse_points3d(os.path.join(sparse_path, 'points3D.txt'))
+    root = os.path.join(base_path, name)
+    sparse_path = os.path.join(root, 'sparse', '0')
+    if os.path.isdir(sparse_path):
+        base = sparse_path
+    else:
+        base = root
+
+    cameras = _parse_cameras(os.path.join(base, 'cameras.txt'))
+    images = _parse_images(os.path.join(base, 'images.txt'))
+    points = _parse_points3d(os.path.join(base, 'points3D.txt'))
     return {'cameras': cameras, 'images': images, 'points': points}

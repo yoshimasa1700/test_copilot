@@ -4,7 +4,7 @@ This repository provides a simple Flask server to visualize multiple COLMAP work
 
 ## Usage
 
-1. Place your COLMAP workspaces inside `viewer/workspaces/`, each in its own directory. The sparse reconstruction should be under `sparse/0/` containing `cameras.txt`, `images.txt` and `points3D.txt`.
+1. Place your COLMAP workspaces inside `viewer/workspaces/`, each in its own directory. The reconstruction files `cameras.txt`, `images.txt` and `points3D.txt` can either be directly inside the workspace folder or under `sparse/0/`.
    A small example workspace is provided in `viewer/workspaces/sample` for testing.
 2. Install dependencies:
    ```bash
