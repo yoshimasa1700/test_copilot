@@ -98,14 +98,24 @@ async function loadWorkspace(name) {
     const camSize = parseFloat(document.getElementById('camera-size').value || '0.02');
     cameraGroup.userData.baseSize = camSize;
     cameraGroup.userData.currentSize = camSize;
+
+    function createCameraMesh(size) {
+        const height = size * 1.5;
+        const geom = new THREE.ConeGeometry(size * 0.5, height, 4);
+        geom.rotateX(-Math.PI / 2);
+        geom.translate(0, 0, height / 2);
+        const mat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+        return new THREE.Mesh(geom, mat);
+    }
+
     for (const key in data.images) {
         const img = data.images[key];
         const center = cameraCenter(img);
-        const sphereGeom = new THREE.SphereGeometry(camSize, 8, 8);
-        const sphereMat = new THREE.MeshBasicMaterial({color:0xff0000});
-        const sphere = new THREE.Mesh(sphereGeom, sphereMat);
-        sphere.position.copy(center);
-        cameraGroup.add(sphere);
+        const mesh = createCameraMesh(camSize);
+        mesh.position.copy(center);
+        const q = new THREE.Quaternion(img.qx, img.qy, img.qz, img.qw).invert();
+        mesh.setRotationFromQuaternion(q);
+        cameraGroup.add(mesh);
     }
     scene.add(cameraGroup);
 }

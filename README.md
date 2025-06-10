@@ -15,4 +15,4 @@ This repository provides a simple Flask server to visualize multiple COLMAP work
    python viewer/app.py
    ```
 4. Open `http://localhost:5000` in your browser to see a list of available workspaces.
-5. Click any workspace name to open its dedicated page with an interactive 3D view of the sparse points and camera poses. Use the sliders below the viewer to change the sizes of points and camera markers.
+5. Click any workspace name to open its dedicated page with an interactive 3D view of the sparse points and camera poses. Cameras are shown as small pyramids. Use the sliders below the viewer to change the sizes of points and camera pyramids.
