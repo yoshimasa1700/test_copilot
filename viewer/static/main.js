@@ -1,4 +1,7 @@
 let renderer, scene, camera, controls;
+let pointCloud = null;
+let pointMaterial = null;
+let cameraGroup = null;
 
 function initThree() {
     const container = document.getElementById('viewer');
@@ -66,6 +69,9 @@ async function loadWorkspace(name) {
         scene.remove(scene.children[0]);
     }
     scene.add(new THREE.AxesHelper(0.1));
+    pointCloud = null;
+    pointMaterial = null;
+    cameraGroup = null;
 
     const pts = data.points;
     if (pts.length) {
@@ -82,19 +88,44 @@ async function loadWorkspace(name) {
         const geom = new THREE.BufferGeometry();
         geom.setAttribute('position', new THREE.BufferAttribute(positions,3));
         geom.setAttribute('color', new THREE.BufferAttribute(colors,3));
-        const material = new THREE.PointsMaterial({ size:0.01, vertexColors:true });
-        const cloud = new THREE.Points(geom, material);
-        scene.add(cloud);
+        const defaultSize = parseFloat(document.getElementById('point-size').value || '0.01');
+        pointMaterial = new THREE.PointsMaterial({ size: defaultSize, vertexColors:true });
+        pointCloud = new THREE.Points(geom, pointMaterial);
+        scene.add(pointCloud);
     }
 
+    cameraGroup = new THREE.Group();
+    const camSize = parseFloat(document.getElementById('camera-size').value || '0.02');
     for (const key in data.images) {
         const img = data.images[key];
         const center = cameraCenter(img);
-        const sphereGeom = new THREE.SphereGeometry(0.02, 8, 8);
+        const sphereGeom = new THREE.SphereGeometry(camSize, 8, 8);
         const sphereMat = new THREE.MeshBasicMaterial({color:0xff0000});
         const sphere = new THREE.Mesh(sphereGeom, sphereMat);
         sphere.position.copy(center);
-        scene.add(sphere);
+        cameraGroup.add(sphere);
+    }
+    scene.add(cameraGroup);
+}
+
+function setupSizeControls() {
+    const pointSlider = document.getElementById('point-size');
+    const cameraSlider = document.getElementById('camera-size');
+    if (pointSlider) {
+        pointSlider.addEventListener('input', () => {
+            const val = parseFloat(pointSlider.value);
+            if (pointMaterial) {
+                pointMaterial.size = val;
+            }
+        });
+    }
+    if (cameraSlider) {
+        cameraSlider.addEventListener('input', () => {
+            const val = parseFloat(cameraSlider.value);
+            if (cameraGroup) {
+                cameraGroup.children.forEach(c => c.scale.set(val, val, val));
+            }
+        });
     }
 }
 
@@ -104,4 +135,5 @@ window.addEventListener('load', () => {
     } else if (typeof WORKSPACE !== 'undefined') {
         loadWorkspace(WORKSPACE);
     }
+    setupSizeControls();
 });

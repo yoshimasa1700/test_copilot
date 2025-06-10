@@ -11,6 +11,14 @@
 <body>
     <h1>Workspace: {{ name }}</h1>
     <div id="viewer"></div>
+    <div>
+        <label>Point Size:
+            <input type="range" id="point-size" min="0.001" max="0.05" step="0.001" value="0.01">
+        </label>
+        <label>Camera Size:
+            <input type="range" id="camera-size" min="0.005" max="0.1" step="0.005" value="0.02">
+        </label>
+    </div>
     <script>
         const WORKSPACE = "{{ name }}";
     </script>
