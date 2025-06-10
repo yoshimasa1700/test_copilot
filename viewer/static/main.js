@@ -9,10 +9,11 @@ function initThree() {
 
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.01, 1000);
-    camera.position.set(0,0,1);
+    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.01, 1000);
+    camera.position.set(0, 0, 1);
 
     controls = new THREE.OrbitControls(camera, renderer.domElement);
+    scene.add(new THREE.AxesHelper(0.1));
     animate();
 }
 
@@ -61,7 +62,10 @@ async function loadWorkspace(name) {
     if (!renderer) initThree();
     const res = await fetch('/api/workspace/' + name);
     const data = await res.json();
-    scene.clear();
+    while (scene.children.length) {
+        scene.remove(scene.children[0]);
+    }
+    scene.add(new THREE.AxesHelper(0.1));
 
     const pts = data.points;
     if (pts.length) {
