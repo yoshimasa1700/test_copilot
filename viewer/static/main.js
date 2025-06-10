@@ -33,16 +33,16 @@ async function loadWorkspaces() {
     const data = await res.json();
     const listDiv = document.getElementById('workspace-list');
     listDiv.innerHTML = '';
-    const ul = document.createElement('ul');
+    const collection = document.createElement('div');
+    collection.className = 'collection';
     data.workspaces.forEach(name => {
-        const li = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = '/workspace/' + name;
-        link.textContent = name;
-        li.appendChild(link);
-        ul.appendChild(li);
+        const item = document.createElement('a');
+        item.href = '/workspace/' + name;
+        item.textContent = name;
+        item.className = 'collection-item';
+        collection.appendChild(item);
     });
-    listDiv.appendChild(ul);
+    listDiv.appendChild(collection);
 }
 
 function quaternionToMatrix(qw, qx, qy, qz) {
