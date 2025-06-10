@@ -33,9 +33,8 @@ async function loadWorkspaces() {
     data.workspaces.forEach(name => {
         const li = document.createElement('li');
         const link = document.createElement('a');
-        link.href = '#';
+        link.href = '/workspace/' + name;
         link.textContent = name;
-        link.onclick = (e) => { e.preventDefault(); loadWorkspace(name); };
         li.appendChild(link);
         ul.appendChild(li);
     });
@@ -95,4 +94,10 @@ async function loadWorkspace(name) {
     }
 }
 
-window.addEventListener('load', loadWorkspaces);
+window.addEventListener('load', () => {
+    if (document.getElementById('workspace-list')) {
+        loadWorkspaces();
+    } else if (typeof WORKSPACE !== 'undefined') {
+        loadWorkspace(WORKSPACE);
+    }
+});
